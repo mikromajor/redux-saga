@@ -1,23 +1,30 @@
-const defaultState = {
-    count: 0
+import {
+  INCREMENT,
+  ASYNC_INCREMENT,
+  DECREMENT,
+  ASYNC_DECREMENT,
+  defaultCountState,
+} from "./constants";
+
+export default function countReducer(
+  state = defaultCountState,
+  action
+) {
+  switch (action.type) {
+    case INCREMENT:
+      return { ...state, count: state.count + 1 };
+    case DECREMENT:
+      return { ...state, count: state.count - 1 };
+    default:
+      return state;
+  }
 }
 
-export const INCREMENT = "INCREMENT"
-export const ASYNC_INCREMENT = "ASYNC_INCREMENT"
-export const DECREMENT = "DECREMENT"
-export const ASYNC_DECREMENT = "ASYNC_DECREMENT"
-
-export default function countReducer(state = defaultState, action) {
-    switch (action.type) {
-        case INCREMENT:
-            return {...state, count: state.count + 1}
-        case DECREMENT:
-            return {...state, count: state.count - 1}
-    }
-    return state
-}
-
-export const incrementCreator = () => ({type: INCREMENT})
-export const asyncIncrementCreator = () => ({type: ASYNC_INCREMENT})
-export const decrementCreator = () => ({type: DECREMENT})
-export const asyncDecrementCreator = () => ({type: ASYNC_DECREMENT})
+export const incrementCreator = () => ({ type: INCREMENT });
+export const asyncIncrementCreator = () => ({
+  type: ASYNC_INCREMENT,
+});
+export const decrementCreator = () => ({ type: DECREMENT });
+export const asyncDecrementCreator = () => ({
+  type: ASYNC_DECREMENT,
+});
