@@ -1,12 +1,16 @@
-import { put, takeEvery } from "redux-saga/effects";
+import {
+  put,
+  takeEvery,
+  takeLeading,
+} from "redux-saga/effects";
 import {
   decrementCreator,
   incrementCreator,
-} from "../store/countReducer";
+} from "../countReducer";
 import {
   ASYNC_DECREMENT,
   ASYNC_INCREMENT,
-} from "../store/constants";
+} from "../constants";
 
 const delay = (ms) =>
   new Promise((res) => setTimeout(res, ms));
@@ -22,6 +26,6 @@ function* decrementWorker() {
 }
 
 export function* countWatcher() {
-  yield takeEvery(ASYNC_INCREMENT, incrementWorker);
-  yield takeEvery(ASYNC_DECREMENT, decrementWorker);
+  yield takeLeading(ASYNC_INCREMENT, incrementWorker);//не запустится ранее окончания предыдущего action-a
+  yield takeEvery(ASYNC_DECREMENT, decrementWorker);// Запускает на каждый action.
 }

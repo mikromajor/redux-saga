@@ -12,8 +12,12 @@ export default function userReducer(
 ) {
   switch (action.type) {
     case SET_USERS:
+      return {
+        ...state,
+        users: [...state.users, ...action.payload],
+      };
     case DELETE_USERS:
-      return { ...state, users: action.payload };
+      return { ...state, users: [] };
     default:
       return state;
   }
@@ -28,9 +32,7 @@ export const fetchUsers = () => ({
 });
 export const deleteUsers = () => ({
   type: DELETE_USERS,
-  payload: [],
 });
-export const deleteUsersVsDelay = (payload) => ({
+export const deleteUsersVsDelay = () => ({
   type: DELETE_USERS_VS_DELAY,
-  payload,
 });

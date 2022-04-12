@@ -16,3 +16,7 @@ export const ASYNC_DECREMENT = "ASYNC_DECREMENT";
 export const defaultCountState = {
   count: 0,
 };
+// const spinnerReducer
+export const LOADING = "LOADING";
+export const LOADED = "LOADED";
+export const ERROR = "ERROR";

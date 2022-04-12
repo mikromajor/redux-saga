@@ -1,89 +1,59 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
-  asyncDecrementCreator,
-  asyncIncrementCreator,
-  decrementCreator,
-  incrementCreator,
-} from "./store/countReducer";
+  //useSelector,
+  connect,
+} from "react-redux";
+
 import {
-  fetchUsers,
-  deleteUsers,
-  deleteUsersVsDelay,
-} from "./store/userReducer";
+  Users,
+  Buttons,
+  ReactCreateElement,
+} from "./components";
+// import { MyClassComponent } from "./components";
+import { Loader, Error } from "./ui";
 import "./style.css";
 
-const App = () => {
-  const count = useSelector(
-    (state) => state.countReducer.count
-  );
-  const users = useSelector(
-    (state) => state.userReducer.users
-  );
-  const dispatch = useDispatch();
-  console.log("count in App ->", count);
-  console.log("users in App ->", users);
+const App = ({ count, users, loader, error }) => {
+  // console.log("count in App ->", count);
+  // console.log("users in App ->", users);
   return (
     <div className='app'>
       <div className='count'>{count}</div>
-      <div className='btns'>
-        <button
-          className='btn'
-          onClick={() => dispatch(asyncIncrementCreator())}
-        >
-          + 1 vs delay
-        </button>
-        <button
-          className='btn'
-          onClick={() => dispatch(incrementCreator())}
-        >
-          + 1
-        </button>
-        <button
-          className='btn'
-          onClick={() => dispatch(asyncDecrementCreator())}
-        >
-          -1 vs delay
-        </button>
-        <button
-          className='btn'
-          onClick={() => dispatch(decrementCreator())}
-        >
-          - 1
-        </button>
-
-        <button
-          className='btn'
-          onClick={() => dispatch(fetchUsers())}
-        >
-          set Users
-        </button>
-        <button
-          className='btn'
-          onClick={() => dispatch(deleteUsers())}
-        >
-          delete Users
-        </button>
-        <button
-          className='btn'
-          onClick={() => dispatch(deleteUsersVsDelay())}
-        >
-          delete user vs delay
-        </button>
-      </div>
-      <div className='users'>
-        {users?.length ? (
-          users.map((user, i) => (
-            <div key={i} className='user'>
-              {user.name}
-            </div>
-          ))
-        ) : (
-          <div>no users</div>
-        )}
-      </div>
+      <ReactCreateElement />
+      <Buttons />
+      {loader ? (
+        <Loader />
+      ) : error ? (
+        <Error message={error} />
+      ) : (
+        <Users users={users} />
+      )}
+      {/* <MyClassComponent>
+        My class component
+      </MyClassComponent> */}
     </div>
   );
 };
+const createAppProps = (store) => ({
+  count: store.countReducer.count,
+  users: store.userReducer.users,
+  loader: store.loadReducer.loader,
+  error: store.loadReducer.error,
+});
 
-export default App;
+export default connect(createAppProps, null)(App);
+
+// connect(createAppProps, createDispatch)) - необходима если хочу передавать хранилище редакса через пропcы компонента
+// I can "pull out" the store in two way :
+// from component props or  useSelector
+//    1 - using useSelector
+//    2 - using connect
+
+// const {count, users, loader, error} = useSelector(
+//   (store) =>({
+//   count: store.countReducer.count,
+// users: store.userReducer.users,
+// loader: store.loadReducer.loader,
+// error: store.loadReducer.error,
+//   })
+// );
